@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Deep Learning RAG Interview Prep Agent
 
 A RAG-powered interview preparation agent built with LangChain, LangGraph,
@@ -730,4 +729,3 @@ Once `VectorStoreManager._initialise()` is implemented, it will
 create this directory automatically on startup.
 =======
 # deep-learning-rag-agent-nisha
->>>>>>> ce3ed6782026952eda10e6e7a787c3a19544d0f9
