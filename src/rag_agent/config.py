@@ -3,8 +3,11 @@ config.py
 =========
 Centralised configuration and LLM + Embedding factories.
 """
- 
+
 from __future__ import annotations
+from dotenv import load_dotenv
+
+load_dotenv()
  
 import os
 import streamlit as st
