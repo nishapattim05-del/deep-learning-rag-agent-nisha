@@ -1,4 +1,12 @@
+streamlit
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langgraph
+chromadb
+pydantic
+pydantic-settings
+loguru
 sentence-transformers
-faiss-cpu
-numpy
-transformers
+tqdm
