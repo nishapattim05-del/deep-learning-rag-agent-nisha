@@ -3,9 +3,11 @@ config.py
 =========
 Centralised configuration and LLM + Embedding factories.
 """
-import streamlit as st
+ 
 from __future__ import annotations
  
+import os
+import streamlit as st
 from enum import Enum
 from functools import lru_cache
  
@@ -43,7 +45,6 @@ class Settings(BaseSettings):
  
     # LLM
     llm_provider: LLMProvider = LLMProvider.GROQ
- 
     groq_api_key: str = Field(default="", alias="GROQ_API_KEY")
     groq_model: str = Field(default="llama-3.1-8b-instant", alias="GROQ_MODEL")
  
@@ -70,13 +71,8 @@ class Settings(BaseSettings):
     app_title: str = Field(default="Deep Learning Interview Prep Agent", alias="APP_TITLE")
  
  
-
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """
-    Load settings from Streamlit secrets if available,
-    otherwise fallback to .env (local).
-    """
     try:
         return Settings(**st.secrets)
     except Exception:
@@ -104,29 +100,25 @@ class LLMFactory:
             raise ValueError(f"Unsupported provider: {provider}")
  
     # -------------------- GROQ --------------------
-def _create_groq(self) -> BaseChatModel:
-    from langchain_groq import ChatGroq
-    import os
+    def _create_groq(self) -> BaseChatModel:
+        from langchain_groq import ChatGroq
  
-    api_key = (
-        os.getenv("GROQ_API_KEY")
-    )
+        api_key = os.getenv("GROQ_API_KEY")
  
-    # fallback to Streamlit secrets
-    try:
-        import streamlit as st
+        # fallback to Streamlit secrets
         if not api_key:
-            api_key = st.secrets.get("GROQ_API_KEY")
-    except Exception:
-        pass
+            try:
+                api_key = st.secrets.get("GROQ_API_KEY")
+            except Exception:
+                pass
  
-    if not api_key:
-        raise EnvironmentError("GROQ_API_KEY is missing")
+        if not api_key:
+            raise EnvironmentError("GROQ_API_KEY is missing")
  
-    return ChatGroq(
-        api_key=api_key,
-        model=self._settings.groq_model,
-    )
+        return ChatGroq(
+            api_key=api_key,
+            model=self._settings.groq_model,
+        )
  
     # -------------------- OLLAMA --------------------
     def _create_ollama(self):
@@ -168,7 +160,6 @@ class EmbeddingFactory:
         else:
             raise ValueError(f"Unsupported embedding provider: {provider}")
  
-    # -------------------- LOCAL --------------------
     def _create_local(self):
         from langchain_community.embeddings import HuggingFaceEmbeddings
  
@@ -176,7 +167,6 @@ class EmbeddingFactory:
             model_name=self._settings.embedding_model
         )
  
-    # -------------------- OPENAI --------------------
     def _create_openai(self):
         from langchain_openai import OpenAIEmbeddings
  
