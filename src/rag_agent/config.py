@@ -104,17 +104,29 @@ class LLMFactory:
             raise ValueError(f"Unsupported provider: {provider}")
  
     # -------------------- GROQ --------------------
-    def _create_groq(self):
-        from langchain_groq import ChatGroq
+def _create_groq(self) -> BaseChatModel:
+    from langchain_groq import ChatGroq
+    import os
  
-        if not self._settings.groq_api_key:
-            raise EnvironmentError("GROQ_API_KEY missing in .env")
+    api_key = (
+        os.getenv("GROQ_API_KEY")
+    )
  
-        return ChatGroq(
-            api_key=self._settings.groq_api_key,
-            model=self._settings.groq_model,
-            temperature=0.2,
-        )
+    # fallback to Streamlit secrets
+    try:
+        import streamlit as st
+        if not api_key:
+            api_key = st.secrets.get("GROQ_API_KEY")
+    except Exception:
+        pass
+ 
+    if not api_key:
+        raise EnvironmentError("GROQ_API_KEY is missing")
+ 
+    return ChatGroq(
+        api_key=api_key,
+        model=self._settings.groq_model,
+    )
  
     # -------------------- OLLAMA --------------------
     def _create_ollama(self):
