@@ -3,7 +3,7 @@ config.py
 =========
 Centralised configuration and LLM + Embedding factories.
 """
- 
+import streamlit as st
 from __future__ import annotations
  
 from enum import Enum
@@ -70,9 +70,17 @@ class Settings(BaseSettings):
     app_title: str = Field(default="Deep Learning Interview Prep Agent", alias="APP_TITLE")
  
  
+
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    return Settings()
+    """
+    Load settings from Streamlit secrets if available,
+    otherwise fallback to .env (local).
+    """
+    try:
+        return Settings(**st.secrets)
+    except Exception:
+        return Settings()
  
  
 # ---------------------------------------------------------------------------
