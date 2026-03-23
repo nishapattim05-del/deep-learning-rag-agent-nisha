@@ -15,7 +15,6 @@ from rag_agent.agent.nodes import (
     generation_node,
     query_rewrite_node,
     retrieval_node,
-    should_retry_retrieval,
 )
 from rag_agent.agent.state import AgentState
 
@@ -37,15 +36,8 @@ class AgentGraphBuilder:
         graph.add_edge(START, "query_rewrite")
         graph.add_edge("query_rewrite", "retrieval")
 
-        # 4. Conditional routing
-        graph.add_conditional_edges(
-            "retrieval",
-            should_retry_retrieval,
-            {
-                "generate": "generation",
-                "end": END,
-            },
-        )
+        # 4. Always go to generation (handles both found and no-context cases)
+        graph.add_edge("retrieval", "generation")
 
         # 5. Final edge
         graph.add_edge("generation", END)
