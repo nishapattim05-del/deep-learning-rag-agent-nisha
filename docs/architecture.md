@@ -12,19 +12,7 @@
 
 ## Architecture Diagram
 
-Replace this section with your team's completed flow chart.
-Export from FigJam, Miro, or draw.io and embed as an image,
-or describe the architecture as an ASCII diagram.
-
-The diagram must show:
-- [ ] How a corpus file becomes a chunk
-- [ ] How a chunk becomes an embedding
-- [ ] How duplicate detection fires
-- [ ] How a user query flows through LangGraph to a response
-- [ ] Where the hallucination guard sits in the graph
-- [ ] How conversation memory is maintained across turns
-
-*(replace this line with your diagram image or ASCII art)*
+![System Architecture Diagram](images/architecture-diagram.jpeg)
 
 ---
 

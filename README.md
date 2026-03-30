@@ -12,6 +12,10 @@ This project implements a Retrieval-Augmented Generation (RAG) system for deep l
 - Answer generation
 
 ## Architecture
+
+![Architecture Diagram](docs/images/architecture-diagram.jpeg)
+
+**Components:**
 1. Data Loading
 2. Chunking
 3. Embeddings
