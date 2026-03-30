@@ -8,7 +8,7 @@ from __future__ import annotations
  
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
  
-from rag_agent.agent.prompts import SYSTEM_PROMPT
+from rag_agent.agent.prompts import NO_CONTEXT_RESPONSE, SYSTEM_PROMPT
 from rag_agent.agent.state import AgentResponse
 from rag_agent.config import LLMFactory
 from rag_agent.vectorstore.store import VectorStoreManager
@@ -67,7 +67,7 @@ def generation_node(state: dict) -> dict:
  
     # ---- No context guard ----
     if state.get("no_context_found"):
-        msg = "No relevant context found in corpus."
+        msg = NO_CONTEXT_RESPONSE
  
         return {
             "final_response": AgentResponse(
